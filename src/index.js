@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import 'tachyons';
+import 'roboto-fontface';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
 
@@ -15,3 +16,14 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+
+
+const palette = {
+  primary: { main: '#0277BD' },
+  secondary: { main: '#E65100' }
+};
+const themeName = 'Lochmara Trinidad Oryx';
+
+export default createMuiTheme({ palette, themeName });
+
