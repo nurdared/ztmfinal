@@ -1,19 +1,24 @@
 import React, { Component } from "react"
 import "./App.css"
-import Navigation from "./components/Navigation/Navigation"
-import Logo from "./components/Logo/Logo"
-import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm"
-import FaceRecognition from "./components/FaceRecognition/FaceRecognition"
-import SignIn from "./components/SignIn/SignIn"
-import Register from "./components/Register/Register"
-import Rank from "./components/Rank/Rank"
+import Navigation from "../components/Navigation/Navigation"
+import Logo from "../components/Logo/Logo"
+import ImageLinkForm from "../components/ImageLinkForm/ImageLinkForm"
+import FaceRecognition from "../components/FaceRecognition/FaceRecognition"
+import SignIn from "../components/SignIn/SignIn"
+import Register from "../components/Register/Register"
+import Profile from '../components/Profile/Profile'
+import Rank from "../components/Rank/Rank"
 import Particles from "react-particles-js"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 const initialState = {
   input: "",
   imageUrl: "",
   boxes: [],
-  route: 'signin',
   isSignedIn: false,
   user: {
     id: "",
@@ -93,12 +98,11 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
-  onRouteChange = (route) => {
-    if (route === "home")
-      this.setState({ isSignedIn: true })
-    else
+  onLoginChange = () => {
+    if (this.state.isSignedIn)
       this.setState(initialState)
-    this.setState({ route })
+    else
+      this.setState({ isSignedIn: true })
   }
 
   loadUser = (data) => {
@@ -126,32 +130,51 @@ class App extends Component {
   }
 
   render() {
-    const { boxes, imageUrl, route, isSignedIn } = this.state;
+    const { boxes, imageUrl, isSignedIn } = this.state;
     return (
       <div className="App">
-        <Particles params={particleOptions} className="particles" />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-          className="logo-nav"
-        >
-          <Logo />
-          <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
-        </div>
-        {
-          route === 'home'
-            ? <>
-              <Rank className="rank" name={this.state.user.name} entries={this.state.user.entries} />
-              <ImageLinkForm
-                className="link-form"
-                onInputChange={this.onInputChange}
-                onPictureSubmit={this.onPictureSubmit}
-              />
-              <FaceRecognition imageUrl={imageUrl} boxes={boxes} />
-            </>
-            : (route === 'signin')
-              ? <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
-              : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser} />
-        }
+        <Router>
+
+
+          <Particles params={particleOptions} className="particles" />
+          <div
+            style={{ display: "flex", justifyContent: "space-between" }}
+            className="logo-nav"
+          >
+            <Logo />
+            <Navigation onLoginChange={this.onLoginChange} isSignedIn={isSignedIn} user={this.state.user} />
+          </div>
+
+          {
+            (this.state.isSignedIn)
+              ?
+              <Switch>
+                <Route path="/profile/:userId">
+                  <Profile user={this.state.user} />
+                </Route>
+                <Route path="/">
+                  <Rank className="rank" name={this.state.user.name} entries={this.state.user.entries} />
+                  <ImageLinkForm
+                    className="link-form"
+                    onInputChange={this.onInputChange}
+                    onPictureSubmit={this.onPictureSubmit}
+                  />
+                  <FaceRecognition imageUrl={imageUrl} boxes={boxes} />
+                </Route>
+              </Switch>
+              :
+              <Switch>
+                <Route path="/register">
+                  <Register onLoginChange={this.onLoginChange} loadUser={this.loadUser} />
+                </Route>
+                <Route path="/">
+                  <SignIn onLoginChange={this.onLoginChange} loadUser={this.loadUser} />
+                </Route>
+              </Switch>
+          }
+
+
+        </Router>
       </div>
     )
   }

@@ -38,14 +38,14 @@ export default class SignIn extends Component {
       .then((response) => response.json())
       .then((user) => {
         if (user.id) {
-          this.props.onRouteChange("home");
+          this.props.onLoginChange();
           this.props.loadUser(user);
         }
       });
   };
 
   render() {
-    const { onRouteChange } = this.props;
+    const { onLoginChange } = this.props;
     return (
       <article
         className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 center shadow-5"
@@ -104,7 +104,7 @@ export default class SignIn extends Component {
                 fullWidth
                 variant="outlined"
                 color="primary"
-                onClick={() => onRouteChange("register")}
+                onClick={onLoginChange}
                 style={{
                   margin: "20px 0px",
                 }}

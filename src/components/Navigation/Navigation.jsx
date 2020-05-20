@@ -1,32 +1,51 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Navigation = ({ onRouteChange, isSignedIn }) => {
+const Navigation = ({ onLoginChange, isSignedIn, user }) => {
   if (isSignedIn) {
     return (
       <nav>
-        <p
-          className="f3 dim link black underline pa3 pointer"
-          onClick={() => onRouteChange("signin")}
-        >
-          Sign Out
-        </p>
+        <ul style={{ display: "flex", listStyleType: "none" }}>
+          <li>
+            <Link className="f3 dim black underline pa3 pointer" to="/">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="f3 dim black underline pa3 pointer"
+              to={`profile/${user.id}`}
+            >
+              Profile
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="f3 dim black underline pa3 pointer"
+              to="/"
+              onClick={onLoginChange}
+            >
+              Sign Out
+            </Link>
+          </li>
+        </ul>
       </nav>
     );
   } else {
     return (
-      <nav style={{ display: "flex" }}>
-        <p
-          className="f3 dim link black underline pa3 pointer"
-          onClick={() => onRouteChange("signin")}
-        >
-          Sign In
-        </p>
-        <p
-          className="f3 dim link black underline pa3 pointer"
-          onClick={() => onRouteChange("register")}
-        >
-          Register
-        </p>
+      <nav>
+        <ul style={{ display: "flex", listStyleType: "none" }}>
+          <li>
+            <Link className="f3 dim black underline pa3 pointer" to="/">
+              Sign In
+            </Link>
+          </li>
+          <li>
+            <Link className="f3 dim black underline pa3 pointer" to="/register">
+              Register
+            </Link>
+          </li>
+        </ul>
       </nav>
     );
   }
