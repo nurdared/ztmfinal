@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { Link } from "react-router-dom";
 
 export default class SignIn extends Component {
   constructor(props) {
@@ -101,17 +102,24 @@ export default class SignIn extends Component {
               >
                 Sign In
               </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                color="primary"
-                onClick={onLoginChange}
+              <Link
+                to="/register"
                 style={{
-                  margin: "20px 0px",
+                  textDecoration: "none",
                 }}
               >
-                Register
-              </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  style={{
+                    margin: "20px 0px",
+                    textDecoration: "none",
+                  }}
+                >
+                  Register
+                </Button>
+              </Link>
             </div>
           </div>
         </Container>
