@@ -6,9 +6,21 @@ import * as serviceWorker from './serviceWorker';
 import 'tachyons';
 import 'roboto-fontface';
 import { createMuiTheme } from '@material-ui/core/styles';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+import thunkMiddleware from 'redux-thunk';
+import { setBaseState } from './reducers';
+import { createLogger } from 'redux-logger';
+
+const logger = createLogger();
+
+const rootReducer = combineReducers({ setBaseState })
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
 
 ReactDOM.render(
-  <App />,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 

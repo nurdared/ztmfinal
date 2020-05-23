@@ -1,0 +1,5 @@
+export const CHANGE_USER_INFO = "CHANGE_USER_INFO";
+
+export const CHANGE_INPUT_URL = "CHANGE_INPUT_URL";
+
+export const SET_DETECTION_BOX = "SET_DETECTION_BOX";

@@ -9,24 +9,28 @@ import Register from "../components/Register/Register"
 import Profile from '../components/Profile/Profile'
 import Rank from "../components/Rank/Rank"
 import Particles from "react-particles-js"
+import { connect } from 'react-redux';
+import { setUserInfo, setInputUrl } from '../actions';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
 
+const mapStatetoProps = state => ({
+  user: state.setBaseState.user,
+  input: state.setBaseState.input,
+})
+
+const mapDispatchToProps = dispatch => ({
+  loadUser: (data) => dispatch(setUserInfo(data)),
+  onInputChange: event => { dispatch(setInputUrl(event.target.value)) }
+})
+
 const initialState = {
-  input: "",
   imageUrl: "",
   boxes: [],
-  isSignedIn: false,
-  user: {
-    id: "",
-    name: "",
-    email: "",
-    entries: 0,
-    joined: ""
-  }
+  isSignedIn: false
 }
 
 const particleOptions = {
@@ -76,12 +80,8 @@ class App extends Component {
     this.setState({ boxes: boxes })
   }
 
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value });
-  }
-
   onPictureSubmit = () => {
-    this.setState({ imageUrl: this.state.input })
+    this.setState({ imageUrl: this.props.input })
     fetch('https://serene-anchorage-51042.herokuapp.com/imageurl', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -105,27 +105,15 @@ class App extends Component {
       this.setState({ isSignedIn: true })
   }
 
-  loadUser = (data) => {
-    this.setState({
-      user: {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined
-      }
-    })
-  }
-
   updateUserEntry() {
     fetch('https://serene-anchorage-51042.herokuapp.com/image', {
       method: 'put',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        id: this.state.user.id
+        id: this.props.user.id
       })
     }).then(response => response.json())
-      .then(count => this.setState(Object.assign(this.state.user, { entries: count })))
+      .then(count => this.setState(Object.assign(this.props.user, { entries: count })))
       .catch(console.log);
   }
 
@@ -142,7 +130,7 @@ class App extends Component {
             className="logo-nav"
           >
             <Logo />
-            <Navigation onLoginChange={this.onLoginChange} isSignedIn={isSignedIn} user={this.state.user} />
+            <Navigation onLoginChange={this.onLoginChange} isSignedIn={isSignedIn} user={this.props.user} />
           </div>
 
           {
@@ -150,13 +138,13 @@ class App extends Component {
               ?
               <Switch>
                 <Route path="/profile/:userId">
-                  <Profile user={this.state.user} />
+                  <Profile user={this.props.user} />
                 </Route>
                 <Route path="/">
-                  <Rank className="rank" name={this.state.user.name} entries={this.state.user.entries} />
+                  <Rank className="rank" name={this.props.user.name} entries={this.props.user.entries} />
                   <ImageLinkForm
                     className="link-form"
-                    onInputChange={this.onInputChange}
+                    onInputChange={this.props.onInputChange}
                     onPictureSubmit={this.onPictureSubmit}
                   />
                   <FaceRecognition imageUrl={imageUrl} boxes={boxes} />
@@ -165,10 +153,10 @@ class App extends Component {
               :
               <Switch>
                 <Route path="/register">
-                  <Register onLoginChange={this.onLoginChange} loadUser={this.loadUser} />
+                  <Register onLoginChange={this.onLoginChange} loadUser={this.props.loadUser} />
                 </Route>
                 <Route path="/">
-                  <SignIn onLoginChange={this.onLoginChange} loadUser={this.loadUser} />
+                  <SignIn onLoginChange={this.onLoginChange} loadUser={this.props.loadUser} />
                 </Route>
               </Switch>
           }
@@ -180,4 +168,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStatetoProps, mapDispatchToProps)(App);
