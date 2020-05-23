@@ -50,6 +50,7 @@ export default class SignIn extends Component {
       <article
         className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 center shadow-5"
         width="500px"
+        style={{ background: "rgba(255,255,255,0.3)" }}
       >
         <Container component="main" maxWidth="xs">
           <div

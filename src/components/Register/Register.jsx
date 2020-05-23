@@ -57,6 +57,7 @@ export default class Register extends Component {
     return (
       <article
         className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 center shadow-5"
+        style={{ background: "rgba(255,255,255,0.3)" }}
         width="500px"
       >
         <Container component="main" maxWidth="xs">
@@ -68,7 +69,7 @@ export default class Register extends Component {
               marginTop: "8px",
             }}
           >
-            <Avatar></Avatar>
+            <Avatar />
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
@@ -109,6 +110,7 @@ export default class Register extends Component {
                 autoComplete="current-password"
                 onChange={this.onPasswordChange}
               />
+
               <Button
                 fullWidth
                 variant="contained"

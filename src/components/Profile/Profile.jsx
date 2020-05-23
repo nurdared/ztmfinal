@@ -22,7 +22,7 @@ export default function Profile({ user }) {
     <div>
       <h1>{user.name}</h1>
       <h5>{user.email}</h5>
-      <h5>{`${months[monthJoined]} ${dayJoined}, ${yearJoined}`}</h5>
+      <h5>{`${months[monthJoined]} ${dayJoined}       , ${yearJoined}`}</h5>
     </div>
   );
 }
